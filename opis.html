@@ -45,7 +45,15 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Opis ideje, ki jo aplikacija podpira -->
-            <p><strong>TO-DO</strong>: Na tem mestu je potrebno dodati <strong>osnovni opis ideje rešitve</strong> (kakšen je osnovni SCENARIJ UPORABE, KDO je ciljna publika, za kakšen NAMEN se aplikacija uporablja).</p><p class="text-muted">Opis naj ne bo daljši od 200 besed.</p>
+            <p>
+                Uporabnik vnese svoje izmerjene podatke in pregleda grafe sprememb. Če ga o katerem izmed vitalnih znakov dodatno zanima, mu API nudi dodatne informacije.
+                <br />
+                Ciljna publika je kdorkoli, ki želi spremljati svoje vitalne znake, še posebno pa tisti, ki želijo biti na kaj posebno pozorni, npr. telesno težo ali krvni pritisk.
+                <br />
+                Aplikacija omogoča uporabniku spremljanje njegovih vitalnih znakov. S pomočjo grafov lažje sledi spremembam.
+                Spremlja lahko tako podatke, ki jih je sam vnesel, kot tudi take, ki se jih da iz vnešenih podatkov izračunati, npr. BMI.
+                Poleg tega lahko uporabnik izve več o raznih vitalnih znakih, saj mu API nudi dodatne informacije.
+            </p>
             <!-- KONEC: Opis ideje, ki jo aplikacija podpira -->
           </div>
         </div>
@@ -55,7 +63,12 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
-            <p><strong>TO-DO</strong>: Na tem mestu je navesti zunanji vir podatkov (URL naslov), na kakšen način ste ga uporabili (neposredni API klic, uvožena statična datoteka ipd.) in kaj je bil namen uporabe (kako se vključuje v osnovno idejo aplikacije).</p>
+            <p>
+              Uporabljen je bil DuckDuckGo Instant Answer API (https://api.duckduckgo.com/api).
+              Njegov namen je poiskati razlage raznih izrazov na spletni strani.
+              Če aplikacija v JSON odgovoru najde kratko besedilo, ga vključi kar v spletno stran, sicer pa uporabnika poveže na poizvedbo na DuckDuckGo spletni strani.
+              Namen tega je uporabniku olajšati izkušnjo in ga spodbuditi, da vnese tudi vitalne znake, na katere se prej ni spoznal.
+            </p>
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>
