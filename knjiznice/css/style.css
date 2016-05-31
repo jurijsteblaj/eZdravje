@@ -1,0 +1,59 @@
+#app-content {
+    width: 100%;
+    font: tahoma, arial, sans-serif;
+}
+
+#title {
+    margin-left: 3%;
+}
+
+#new-ehr-button {
+    margin-left: 3%;
+}
+
+#data-div {
+    width: 90%;
+    margin-top: 1%;
+    margin-left: 5%;
+    padding: 1%
+}
+
+#data-div h3 {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+#master-detail {
+    padding-bottom: 2%;
+}
+
+.detail {
+    width: 90%;
+}
+
+.detail div {
+    display: inline-block;
+}
+
+#cover {
+    display: none;
+    position: fixed;
+    filter: opacity(0.5);
+    background-color: black;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#new-ehr-popup {
+    display: none;
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    height: 50%;
+    width: 50%;
+    background-color: white;
+}

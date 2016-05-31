@@ -40,3 +40,20 @@ function generirajPodatke(stPacienta) {
 
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
+$(document).ready(function() {
+    $(function() {
+      $( "#master-detail" ).accordion();
+    });
+    
+    
+    
+    $("#new-ehr-button").click(function() {
+        $("#cover").css("display", "block");
+        $("#new-ehr-popup").css("display", "block");
+    });
+    
+    $("#new-ehr-cancel").click(function() {
+        $("#cover").css("display", "none");
+        $("#new-ehr-popup").css("display", "none");
+    });
+})

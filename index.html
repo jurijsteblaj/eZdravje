@@ -4,10 +4,12 @@
   <meta charset="utf-8">
   <title>eZdravje :: 4. DN :: OIS 2015/2016</title>
   <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
+  <link href="knjiznice/css/style.css" rel="stylesheet">
   <style>
     body {padding-top: 70px;}
   </style>
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
+  <script src="knjiznice/js/jquery-ui.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
   <script src="knjiznice/js/koda.js"></script>
 </head>
@@ -37,11 +39,91 @@
   <!-- KONEC: Menujska vrstica na vrhu spletne strani -->
 
   <!-- ZAČETEK: Vsebina aplikacije -->
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
+  <div id="app-content" class="max-height">
+    <h1 id="title">
+      HealthTrack
+    </h1>
+    <input id="new-ehr-button" type="button" value="Create new EHR"></input>
+    <div id="data-div">
+      <h3>
+        EHR ID
+        <input type="text">
+        </input>
+      </h3>
+      <h3>
+        Time and date
+        <input type="text">
+        </input>
+      </h3>
+      <div id="master-detail">
+        <h3>
+          Height
+          <input type="text">
+          </input>
+        </h3>
+        <div class="detail">
+          <div class="chart">test1</div>
+          <div class="data">test2</div>
+          <div class="about">test3</div>
+        </div>
+        <h3>
+          Weight
+          <input type="text">
+          </input>
+        </h3>
+        <div class="detail">
+          <div class="chart">test1</div>
+          <div class="data">test2</div>
+          <div class="about">test3</div>
+        </div>
+        <h3>
+          Body temperature
+          <input type="text">
+          </input>
+        </h3>
+        <div class="detail">
+          <div class="chart">test1</div>
+          <div class="data">test2</div>
+          <div class="about">test3</div>
+        </div>
+        <h3>
+          Blood pressure
+          <input type="text">
+          </input>
+          <input type="text">
+          </input>
+        </h3>
+        <div class="detail">
+          <div class="chart">test1</div>
+          <div class="data">test2</div>
+          <div class="about">test3</div>
+        </div>
+        <h3>
+          Blood oxygen level
+          <input type="text">
+          </input>
+        </h3>
+        <div class="detail">
+          <div class="chart">test1</div>
+          <div class="data">test2</div>
+          <div class="about">test3</div>
+        </div>
       </div>
+      <input type="button" value="Submit data">
+    </div>
+    <div id="cover"></div>
+    <div id="new-ehr-popup">
+      First name
+      <input type="text"></input>
+      <br>
+      Last name
+      <input type="text"></input>
+      <br>
+      Date of birth
+      <input type="text"></input>
+      <br>
+      <input id="new-ehr-cancel" type="button" value="Cancel"></input>
+      <input type="button" value="Create"></input>
     </div>
   </div>
   <!-- KONEC: Vsebina aplikacije -->
