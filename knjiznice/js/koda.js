@@ -21,6 +21,21 @@ function getSessionId() {
     return response.responseJSON.sessionId;
 }
 
+function newEhr(firstName, lastName, dateOfBirth) {
+    var sessionId = getSessionId();
+    
+    $.ajaxSetup({
+	    headers: {"Ehr-Session": sessionId}
+	});
+	$.ajax({
+	    url: baseUrl + "/ehr",
+	    type: "POST",
+	    success: function(data) {
+	        var ehrId = data.ehrId;
+	        $("#response").text("Your new EHR ID is " + ehrId);
+	    }
+	});
+}
 
 /**
  * Generator podatkov za novega pacienta, ki bo uporabljal aplikacijo. Pri
@@ -45,8 +60,6 @@ $(document).ready(function() {
       $( "#master-detail" ).accordion();
     });
     
-    
-    
     $("#new-ehr-button").click(function() {
         $("#cover").css("display", "block");
         $("#new-ehr-popup").css("display", "block");
@@ -55,5 +68,30 @@ $(document).ready(function() {
     $("#new-ehr-cancel").click(function() {
         $("#cover").css("display", "none");
         $("#new-ehr-popup").css("display", "none");
+    });
+    
+    $("#new-ehr-create").click(function() {
+        var emptyFields = false;
+        var inputFields = $("#new-ehr-popup input[type=text]");
+        var firstName = $("#first-name").val();
+        var lastName = $("#last-name").val();
+        var dateOfBirth = $("date-of-birth").val(); // TODO: do I even need DoB?
+        for (var i = 0; i < inputFields.length; i++) {
+            var inputField = $(inputFields[i]);
+            if (inputField.val() == "") {
+                emptyFields = true;
+                inputField.css("background-color", "#ff7f7f");
+            }
+            else {
+                inputField.css("background-color", "#7fff7f");
+            }
+        }
+        
+        if (! emptyFields) {
+            newEhr(firstName, lastName, dateOfBirth);
+        }
+        else {
+            $("#response").text("Complete all fields to create a new EHR");
+        }
     });
 })
