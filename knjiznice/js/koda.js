@@ -111,11 +111,75 @@ function generirajPodatke(stPacienta) {
   return ehrId;
 }
 
+function generateTable(div, ehrId, dataType) {
+    var sessionId = getSessionId();
+    
+    $.ajaxSetup({
+	    headers: {"Ehr-Session": sessionId}
+	});
+	
+	var result = "<table><tr><th>Date and time</th><th>";
+	switch (dataType) {
+	    case "oxygen":
+	        result += "Oxygen level";
+	        break;
+	    case "pressure":
+	        result += "Systolic pressure</th><th>Diastolic pressure"
+	        break;
+	    default:
+	        result += dataType.charAt(0).toUpperCase() + dataType.slice(1);
+	}
+	result += "</th></tr>"
+	
+	var urlSuffix;
+	switch (dataType) {
+        case "temperature":
+            urlSuffix = "body_temperature";
+            break;
+        case "pressure":
+            urlSuffix = "blood_pressure";
+            break;
+        case "oxygen":
+            urlSuffix = "spO2";
+            break;
+        default:
+            urlSuffix = dataType;
+	}
+	
+	$.ajax({
+	    url: baseUrl + "/view/" + ehrId + "/" + urlSuffix,
+	    type: "GET",
+        success: function(data) {
+            for (var i in data) {
+                result += "<tr><td>" + data[i].time + "</td><td>";
+                switch (dataType) {
+                    case "pressure":
+                        result += data[i].systolic + data[i].unit +"</td><td>" +
+                            data[i].diastolic + data[i].unit;
+                        break;
+                    case "oxygen":
+                        result += data[i].spO2;
+                        break;
+                    default:
+                        result += data[i][dataType] + " " + data[i].unit;
+                }
+                result += "</td></tr>";
+            }
+            result += "</table>";
+            div.html(result);
+	    },
+	    error: function(error) {
+	        div.html("Error: " + JSON.parse(error.responseText).userMessage);
+	    }
+	});
+	
+	
+}
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
 $(document).ready(function() {
     $(function() {
-      $( "#master-detail" ).accordion();
+      $( "#master-detail" ).accordion({heightStyle: 'panel'});
     });
     
     $("#new-ehr-button").click(function() {
@@ -157,24 +221,44 @@ $(document).ready(function() {
     });
     
     $("#submit-data").click(function() {
-        var ehrId = $("#ehr-id").val();
-        var dateAndTime = $("#date-and-time").val();
-        var height = $("#height").val();
-        var weight = $("#weight").val();
-        var temperature = $("#temperature").val();
-        var systolicBP = $("#systolic").val();
-        var diastolicBP = $("#diastolic").val();
-        var oxygen = $("#oxygen").val();
-        
-        submitData(ehrId, dateAndTime, height, weight, temperature,
-            systolicBP, diastolicBP, oxygen, function(error, response) {
-                if (! error) {
-                    $("#submit-response").text("Data successfully entered");
-                }
-                else {
-                    $("#submit-response").text("Error: " +
-                        JSON.parse(error.responseText).userMessage);
-                }
-            });
+        var ehrId = $("#ehr-id-input").val();
+        if (ehrId == "") {
+            $("#ehr-id-input").css("backfround-color", "#ff7f7f");
+        }
+        else {
+            $("#ehr-id-input").css("backfround-color", "white");
+            var dateAndTime = $("#date-and-time-input").val();
+            var height = $("#height-input").val();
+            var weight = $("#weight-input").val();
+            var temperature = $("#temperature-input").val();
+            var systolicBP = $("#systolic-input").val();
+            var diastolicBP = $("#diastolic-input").val();
+            var oxygen = $("#oxygen-input").val();
+            
+            submitData(ehrId, dateAndTime, height, weight, temperature,
+                systolicBP, diastolicBP, oxygen, function(error, response) {
+                    if (! error) {
+                        $("#submit-response").text("Data successfully entered");
+                    }
+                    else {
+                        $("#submit-response").text("Error: " +
+                            JSON.parse(error.responseText).userMessage);
+                    }
+                });
+        }
+    });
+    
+    $("#master-detail > h3").click(function() {
+        var ehrId = $("#ehr-id-input").val();
+        if (ehrId == "") {
+            $("#ehr-id-input").css("backfround-color", "#ff7f7f");
+        }
+        else {
+            $("#ehr-id-input").css("backfround-color", "white");
+            var outputDiv = $(this).next();
+            var dataType = outputDiv.attr("id").split("-")[0];
+            
+            generateTable(outputDiv.children(".data"), ehrId, dataType);
+        }
     });
 })
