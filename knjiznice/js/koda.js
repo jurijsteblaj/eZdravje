@@ -21,7 +21,7 @@ function getSessionId() {
     return response.responseJSON.sessionId;
 }
 
-function newEhr(firstName, lastName, dateOfBirth) {
+function newEhr(firstName, lastName, dateOfBirth, callback) {
     var sessionId = getSessionId();
     
     $.ajaxSetup({
@@ -31,9 +31,25 @@ function newEhr(firstName, lastName, dateOfBirth) {
 	    url: baseUrl + "/ehr",
 	    type: "POST",
 	    success: function(data) {
-	        var ehrId = data.ehrId;
-	        $("#response").text("Your new EHR ID is " + ehrId);
-	    }
+            var ehrId = data.ehrId;
+            var partyData = {
+                firstNames: firstName,
+                lastNames: lastName,
+                dateOfBirth: dateOfBirth,
+                partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
+            };
+            $.ajax({
+                url: baseUrl + "/demographics/party",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(partyData),
+                success: function (party) {
+                    if (party.action == 'CREATE') {
+                        callback(ehrId);
+                    }
+                }
+            });
+        }
 	});
 }
 
@@ -76,7 +92,7 @@ $(document).ready(function() {
         var firstName = $("#first-name").val();
         var lastName = $("#last-name").val();
         var dateOfBirth = $("date-of-birth").val(); // TODO: do I even need DoB?
-        for (var i = 0; i < inputFields.length; i++) {
+        for (var i = 0; i < inputFields.length; i++) { //TODO: switch up vital signs? find those you can measure at home?
             var inputField = $(inputFields[i]);
             if (inputField.val() == "") {
                 emptyFields = true;
@@ -88,7 +104,10 @@ $(document).ready(function() {
         }
         
         if (! emptyFields) {
-            newEhr(firstName, lastName, dateOfBirth);
+            var ehrId = newEhr(firstName, lastName, dateOfBirth, function(ehrId) {
+                $("#response").text("Your new EHR ID is " + ehrId);
+                $("#ehr-id").val(ehrId);
+            });
         }
         else {
             $("#response").text("Complete all fields to create a new EHR");
