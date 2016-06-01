@@ -53,6 +53,48 @@ function newEhr(firstName, lastName, dateOfBirth, callback) {
 	});
 }
 
+function submitData(ehrId, dateAndTime, height, weight, temperature,
+        systolicBP, diastolicBP, oxygen, callback) {
+            
+    var sessionId = getSessionId();
+    
+    var data = {
+        "ctx/language": "en",
+        "ctx/territory": "SI",
+        "ctx/time": dateAndTime,
+	    "vital_signs/height_length/any_event/body_height_length": height,
+	    "vital_signs/body_weight/any_event/body_weight": weight,
+	   	"vital_signs/body_temperature/any_event/temperature|magnitude": temperature,
+	    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+	    "vital_signs/blood_pressure/any_event/systolic": systolicBP,
+	    "vital_signs/blood_pressure/any_event/diastolic": diastolicBP,
+	    "vital_signs/indirect_oximetry:0/spo2|numerator": oxygen
+    }
+    
+    var parameters = {
+	    ehrId: ehrId,
+	    templateId: 'Vital Signs',
+	    format: 'FLAT'
+	};
+	
+	$.ajaxSetup({
+	    headers: {"Ehr-Session": sessionId}
+	});
+	
+	$.ajax({
+	    url: baseUrl + "/composition?" + $.param(parameters),
+	    type: 'POST',
+	    contentType: 'application/json',
+	    data: JSON.stringify(data),
+	    success: function (response) {
+	        callback(undefined, response);
+	    },
+	    error: function(error) {
+	    	callback(error);
+	    }
+	});
+}
+
 /**
  * Generator podatkov za novega pacienta, ki bo uporabljal aplikacijo. Pri
  * generiranju podatkov je potrebno najprej kreirati novega pacienta z
@@ -105,12 +147,34 @@ $(document).ready(function() {
         
         if (! emptyFields) {
             var ehrId = newEhr(firstName, lastName, dateOfBirth, function(ehrId) {
-                $("#response").text("Your new EHR ID is " + ehrId);
+                $("#new-ehr-response").text("Your new EHR ID is " + ehrId);
                 $("#ehr-id").val(ehrId);
             });
         }
         else {
-            $("#response").text("Complete all fields to create a new EHR");
+            $("#new-ehr-response").text("Complete all fields to create a new EHR");
         }
+    });
+    
+    $("#submit-data").click(function() {
+        var ehrId = $("#ehr-id").val();
+        var dateAndTime = $("#date-and-time").val();
+        var height = $("#height").val();
+        var weight = $("#weight").val();
+        var temperature = $("#temperature").val();
+        var systolicBP = $("#systolic").val();
+        var diastolicBP = $("#diastolic").val();
+        var oxygen = $("#oxygen").val();
+        
+        submitData(ehrId, dateAndTime, height, weight, temperature,
+            systolicBP, diastolicBP, oxygen, function(error, response) {
+                if (! error) {
+                    $("#submit-response").text("Data successfully entered");
+                }
+                else {
+                    $("#submit-response").text("Error: " +
+                        JSON.parse(error.responseText).userMessage);
+                }
+            });
     });
 })
