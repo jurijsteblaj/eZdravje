@@ -172,8 +172,59 @@ function generateTable(div, ehrId, dataType) {
 	        div.html("Error: " + JSON.parse(error.responseText).userMessage);
 	    }
 	});
-	
-	
+}
+
+var duckduckgoCache = {};
+function generateAdditionalInfo(div, dataType) {
+    if (duckduckgoCache[dataType]) {
+        div.html(duckduckgoCache[dataType]);
+    }
+    else {
+        var query;
+        switch (dataType) {
+            case "temperature":
+                query = "human+body+temperature";
+                break;
+            case "height":
+                query = "human+height";
+                break;
+            case "weight":
+                query = "human+body+weight";
+                break;
+            case "pressure":
+                query = "human+blood+pressure"
+                break;
+            case "oxygen":
+                query = "blood+oxygen+level"
+                break;
+        }
+        var url = "https://api.duckduckgo.com/?q=" + query + "&t=HealthTrack" + 
+            "&ia=about&format=json&callback=?";
+        var ddgSearchLink = "https://api.duckduckgo.com/?q=" + query +
+            "&t=HealthTrack&ia=about";
+        $.getJSON({
+            url,
+            success: function(data) {
+                var abstract = data.AbstractText;
+                var result;
+                if (abstract != "") {
+                    var attribution = "&mdash; <a target='_blank' href='" +
+                        data.AbstractURL + "'>" + data.AbstractSource + "</a>\
+                        <br />\
+                        <img heigth='50' width='63' src='img/ddg.png'>\
+                        <a target='_blank' href='https://duckduckgo.com/'>Results from DuckDuckGo</a>\
+                        (<a target='_blank' href='" + ddgSearchLink + "'>results link</a>)";
+                    result = abstract + "<br />" + attribution;
+                }
+                else {
+                    result = "<a target='_blank' href='" + ddgSearchLink +
+                        "'>Click here to learn about this vital sign</a>";
+                }
+                duckduckgoCache[dataType] = result;
+                div.html(result);
+            }
+        });
+    }
 }
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
@@ -250,15 +301,18 @@ $(document).ready(function() {
     
     $("#master-detail > h3").click(function() {
         var ehrId = $("#ehr-id-input").val();
+        
+        var outputDiv = $(this).next();
+        var dataType = outputDiv.attr("id").split("-")[0];
         if (ehrId == "") {
-            $("#ehr-id-input").css("backfround-color", "#ff7f7f");
+            $("#ehr-id-input").css("background-color", "#ff7f7f");
         }
         else {
-            $("#ehr-id-input").css("backfround-color", "white");
-            var outputDiv = $(this).next();
-            var dataType = outputDiv.attr("id").split("-")[0];
-            
+            $("#ehr-id-input").css("background-color", "white");
             generateTable(outputDiv.children(".data"), ehrId, dataType);
         }
+        
+        generateAdditionalInfo(outputDiv.children(".about"), dataType);
+        
     });
 })
