@@ -185,8 +185,103 @@ function generateTable(div, ehrId, dataType) {
 	});
 }
 
-function generateChart() {
-    
+function generateChart(div, ehrId, dataType) {
+    getData(ehrId, dataType, function(error, data) {
+        if (! error) {
+            var svgId = dataType + "-d3";
+            div.html("<svg id='" + svgId + "' width='250' height='250'></svg>");
+            
+            var domain;
+            switch (dataType) {
+                case "height":
+                    domain = [0, 250]
+                    break;
+                case "weight":
+                    domain = [0, 250];
+                    break;
+                case "temperature":
+                    domain = [30, 45];
+                    break;
+                case "pressure":
+                    domain = [60, 140];
+                    break;
+                case "oxygen":
+                    domain = [85, 100];
+                    break;
+                default:
+                    domain = [0, 300];
+            }
+            
+            var vis = d3.select("#" + svgId),
+                WIDTH = 250,
+                HEIGHT = 250,
+                MARGINS = {
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 50
+                },
+                xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([1,data.length]),
+                yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain(domain),
+                xAxis = d3.svg.axis()
+                    .scale(xScale),
+                yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left");
+            
+            vis.append("svg:g")
+                .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+                .call(xAxis);
+            
+            vis.append("svg:g")
+                .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+                .call(yAxis);
+            
+            var lineGen = d3.svg.line()
+                .x(function(data) {
+                return xScale(data.num);
+                })
+                .y(function(data) {
+                return yScale(data.val);
+                });
+            
+            var values = new Array(data.length);
+            for (var i in data) {
+                values[values.length - i - 1] = { num: values.length - i };
+                switch (dataType) {
+                    case "pressure":
+                        values[values.length - i - 1].val = data[i].systolic;
+                        break;
+                    case "oxygen":
+                        values[values.length - i - 1].val = data[i].spO2;
+                        break;
+                    default:
+                        values[values.length - i - 1].val = data[i][dataType];
+                }
+            }
+            
+            vis.append('svg:path')
+                .attr('d', lineGen(values))
+                .attr('stroke', 'blue')
+                .attr('stroke-width', 1)
+                .attr('fill', 'none');
+            
+            if (dataType === "pressure") {
+                for (var i in data) {
+                    values[values.length - i - 1].val = data[i].diastolic;
+                }
+                
+                vis.append('svg:path')
+                    .attr('d', lineGen(values))
+                    .attr('stroke', 'green')
+                    .attr('stroke-width', 1)
+                    .attr('fill', 'none');
+            }
+        }
+        else {
+            div.html("Error: " + JSON.parse(error.responseText).userMessage);
+        }
+    });
 }
 
 var duckduckgoCache = {};
@@ -325,6 +420,7 @@ $(document).ready(function() {
         else {
             $("#ehr-id-input").css("background-color", "white");
             generateTable(outputDiv.children(".data"), ehrId, dataType);
+            generateChart(outputDiv.children(".chart"), ehrId, dataType);
         }
         
         generateAdditionalInfo(outputDiv.children(".about"), dataType);
