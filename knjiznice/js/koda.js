@@ -111,25 +111,12 @@ function generirajPodatke(stPacienta) {
   return ehrId;
 }
 
-function generateTable(div, ehrId, dataType) {
+function getData(ehrId, dataType, callback) {
     var sessionId = getSessionId();
     
     $.ajaxSetup({
 	    headers: {"Ehr-Session": sessionId}
 	});
-	
-	var result = "<table><tr><th>Date and time</th><th>";
-	switch (dataType) {
-	    case "oxygen":
-	        result += "Oxygen level";
-	        break;
-	    case "pressure":
-	        result += "Systolic pressure</th><th>Diastolic pressure"
-	        break;
-	    default:
-	        result += dataType.charAt(0).toUpperCase() + dataType.slice(1);
-	}
-	result += "</th></tr>"
 	
 	var urlSuffix;
 	switch (dataType) {
@@ -150,7 +137,31 @@ function generateTable(div, ehrId, dataType) {
 	    url: baseUrl + "/view/" + ehrId + "/" + urlSuffix,
 	    type: "GET",
         success: function(data) {
-            for (var i in data) {
+            callback(false, data);
+	    },
+	    error: function(error) {
+	        callback(error);
+	    }
+	});
+}
+
+function generateTable(div, ehrId, dataType) {
+	var result = "<table><tr><th>Date and time</th><th>";
+	switch (dataType) {
+	    case "oxygen":
+	        result += "Oxygen level";
+	        break;
+	    case "pressure":
+	        result += "Systolic pressure</th><th>Diastolic pressure"
+	        break;
+	    default:
+	        result += dataType.charAt(0).toUpperCase() + dataType.slice(1);
+	}
+	result += "</th></tr>"
+	
+	getData(ehrId, dataType, function(error, data) {
+	    if (! error) {
+	        for (var i in data) {
                 result += "<tr><td>" + data[i].time + "</td><td>";
                 switch (dataType) {
                     case "pressure":
@@ -167,11 +178,15 @@ function generateTable(div, ehrId, dataType) {
             }
             result += "</table>";
             div.html(result);
-	    },
-	    error: function(error) {
+	    }
+	    else {
 	        div.html("Error: " + JSON.parse(error.responseText).userMessage);
 	    }
 	});
+}
+
+function generateChart() {
+    
 }
 
 var duckduckgoCache = {};
