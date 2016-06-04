@@ -21,7 +21,7 @@ function getSessionId() {
     return response.responseJSON.sessionId;
 }
 
-function newEhr(firstName, lastName, dateOfBirth, callback) {
+function newEhr(callback) {
     var sessionId = getSessionId();
     
     $.ajaxSetup({
@@ -33,9 +33,6 @@ function newEhr(firstName, lastName, dateOfBirth, callback) {
 	    success: function(data) {
             var ehrId = data.ehrId;
             var partyData = {
-                firstNames: firstName,
-                lastNames: lastName,
-                dateOfBirth: dateOfBirth,
                 partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
             };
             $.ajax({
@@ -344,50 +341,19 @@ $(document).ready(function() {
     });
     
     $("#new-ehr-button").click(function() {
-        $("#cover").css("display", "block");
-        $("#new-ehr-popup").css("display", "block");
-    });
-    
-    $("#new-ehr-cancel").click(function() {
-        $("#cover").css("display", "none");
-        $("#new-ehr-popup").css("display", "none");
-    });
-    
-    $("#new-ehr-create").click(function() {
-        var emptyFields = false;
-        var inputFields = $("#new-ehr-popup input[type=text]");
-        var firstName = $("#first-name").val();
-        var lastName = $("#last-name").val();
-        var dateOfBirth = $("date-of-birth").val(); // TODO: do I even need DoB?
-        for (var i = 0; i < inputFields.length; i++) { //TODO: switch up vital signs? find those you can measure at home?
-            var inputField = $(inputFields[i]);
-            if (inputField.val() == "") {
-                emptyFields = true;
-                inputField.css("background-color", "#ff7f7f");
-            }
-            else {
-                inputField.css("background-color", "#7fff7f");
-            }
-        }
-        
-        if (! emptyFields) {
-            var ehrId = newEhr(firstName, lastName, dateOfBirth, function(ehrId) {
-                $("#new-ehr-response").text("Your new EHR ID is " + ehrId);
-                $("#ehr-id").val(ehrId);
-            });
-        }
-        else {
-            $("#new-ehr-response").text("Complete all fields to create a new EHR");
-        }
+        newEhr(function(ehrId) {
+            $("#ehr-id-input").val(ehrId);
+            alert("Your new EHR ID is " + ehrId);
+        });
     });
     
     $("#submit-data").click(function() {
         var ehrId = $("#ehr-id-input").val();
         if (ehrId == "") {
-            $("#ehr-id-input").css("backfround-color", "#ff7f7f");
+            $("#ehr-id-input").css("background-color", "#ff7f7f");
         }
         else {
-            $("#ehr-id-input").css("backfround-color", "white");
+            $("#ehr-id-input").css("background-color", "white");
             var dateAndTime = $("#date-and-time-input").val();
             var height = $("#height-input").val();
             var weight = $("#weight-input").val();

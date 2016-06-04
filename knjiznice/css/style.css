@@ -36,24 +36,3 @@
 .detail div {
     display: inline-block;
 }
-
-#cover {
-    display: none;
-    position: fixed;
-    filter: opacity(0.5);
-    background-color: black;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-}
-
-#new-ehr-popup {
-    display: none;
-    position: fixed;
-    top: 25%;
-    left: 25%;
-    height: 50%;
-    width: 50%;
-    background-color: white;
-}
