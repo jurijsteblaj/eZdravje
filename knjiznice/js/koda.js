@@ -101,11 +101,37 @@ function submitData(ehrId, dateAndTime, height, weight, temperature,
  * @return ehrId generiranega pacienta
  */
 function generirajPodatke(stPacienta) {
-  ehrId = "";
-
-  // TODO: Potrebno implementirati
-
-  return ehrId;
+    if (stPacienta === 1) {
+        newEhr(function(ehrId) {
+            submitData(ehrId, "", "176", "140", "", "", "", "", function() {});
+            submitData(ehrId, "", "176", "142", "", "", "", "", function() {});
+            submitData(ehrId, "", "176", "137", "", "", "", "", function() {});
+            submitData(ehrId, "", "177", "128", "", "", "", "", function() {});
+            $("#samples").html($("#samples").html() + "<option value='" + ehrId + "'>" + ehrId + "</option>");
+        });
+    }
+    else if (stPacienta === 2) {
+        newEhr(function(ehrId) {
+            submitData(ehrId, "", "", "156", "", "131", "87", "", function() {});
+            submitData(ehrId, "", "", "156", "", "133", "85", "", function() {});
+            submitData(ehrId, "", "", "153", "", "132", "85", "", function() {});
+            submitData(ehrId, "", "", "147", "", "129", "83", "", function() {});
+            $("#samples").html($("#samples").html() + "<option value='" + ehrId + "'>" + ehrId + "</option>");
+        });
+    }
+    else {
+        newEhr(function(ehrId) {
+            submitData(ehrId, "", "", "", "41", "", "", "", function() {});
+            submitData(ehrId, "", "", "", "40", "", "", "", function() {});
+            submitData(ehrId, "", "", "", "39", "", "", "", function() {});
+            submitData(ehrId, "", "", "", "38", "", "", "", function() {});
+            $("#samples").html($("#samples").html() + "<option value='" + ehrId + "'>" + ehrId + "</option>");
+        });
+    }
+    
+    // TODO: Potrebno implementirati
+    
+    //return ehrId;
 }
 
 function getData(ehrId, dataType, callback) {
@@ -336,6 +362,16 @@ function generateAdditionalInfo(div, dataType) {
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
 $(document).ready(function() {
+    $("#generate-samples").click(function() {
+        generirajPodatke(1);
+        generirajPodatke(2);
+        generirajPodatke(3);
+    });
+    
+    $("#samples").change(function() {
+        $("#ehr-id-input").val($(this).val());
+    });
+    
     $("#new-ehr-button").click(function() {
         newEhr(function(ehrId) {
             $("#ehr-id-input").val(ehrId);

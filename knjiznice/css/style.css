@@ -3,11 +3,7 @@
     font: tahoma, arial, sans-serif;
 }
 
-#title {
-    margin-left: 3%;
-}
-
-#new-ehr-button {
+#title, #new-ehr-button, #samples {
     margin-left: 3%;
 }
 
