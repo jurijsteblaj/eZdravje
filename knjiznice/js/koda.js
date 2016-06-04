@@ -336,10 +336,6 @@ function generateAdditionalInfo(div, dataType) {
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
 $(document).ready(function() {
-    $(function() {
-      $( "#master-detail" ).accordion({heightStyle: 'panel'});
-    });
-    
     $("#new-ehr-button").click(function() {
         newEhr(function(ehrId) {
             $("#ehr-id-input").val(ehrId);
@@ -379,6 +375,7 @@ $(document).ready(function() {
         var ehrId = $("#ehr-id-input").val();
         
         var outputDiv = $(this).next();
+        
         var dataType = outputDiv.attr("id").split("-")[0];
         if (ehrId == "") {
             $("#ehr-id-input").css("background-color", "#ff7f7f");
@@ -390,6 +387,6 @@ $(document).ready(function() {
         }
         
         generateAdditionalInfo(outputDiv.children(".about"), dataType);
-        
+        outputDiv.slideToggle();
     });
 })

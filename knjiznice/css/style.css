@@ -18,7 +18,7 @@
     padding: 1%
 }
 
-#data-div h3 {
+h3 {
     border-style: solid;
     border-width: 2px;
     border-radius: 5px;
@@ -30,9 +30,12 @@
 }
 
 .detail {
+    display: none;
     width: 90%;
 }
 
 .detail div {
     display: inline-block;
+    height: 250px;
 }
+
