@@ -49,9 +49,9 @@
                 Uporabnik vnese svoje izmerjene podatke in pregleda grafe sprememb. Če ga o katerem izmed vitalnih znakov dodatno zanima, mu API nudi dodatne informacije.
                 <br />
                 Ciljna publika je kdorkoli, ki želi spremljati svoje vitalne znake, še posebno pa tisti, ki želijo biti na kaj posebno pozorni, npr. telesno težo ali krvni pritisk.
+                Aplikacija je torej predvsem namenjena samostojni uporabi doma, zato nekaj kompleksnosti žrtvuje za enostavno uporabo.
                 <br />
-                Aplikacija omogoča uporabniku spremljanje njegovih vitalnih znakov. S pomočjo grafov lažje sledi spremembam.
-                Spremlja lahko tako podatke, ki jih je sam vnesel, kot tudi take, ki se jih da iz vnešenih podatkov izračunati, npr. BMI.
+                Aplikacija omogoča uporabniku spremljanje njegovih vitalnih znakov. S pomočjo grafov lažje sledi spremembam in si zastavi cilje.
                 Poleg tega lahko uporabnik izve več o raznih vitalnih znakih, saj mu API nudi dodatne informacije.
             </p>
             <!-- KONEC: Opis ideje, ki jo aplikacija podpira -->
@@ -64,7 +64,7 @@
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
             <p>
-              Uporabljen je bil DuckDuckGo Instant Answer API (https://api.duckduckgo.com/api).
+              Uporabljen je <a href="https://api.duckduckgo.com/api">DuckDuckGo Instant Answer API</a>.
               Njegov namen je poiskati razlage raznih izrazov na spletni strani.
               Če aplikacija v JSON odgovoru najde kratko besedilo, ga vključi kar v spletno stran, sicer pa uporabnika poveže na poizvedbo na DuckDuckGo spletni strani.
               Namen tega je uporabniku olajšati izkušnjo in ga spodbuditi, da vnese tudi vitalne znake, na katere se prej ni spoznal.
@@ -78,7 +78,12 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Master/detail načrtovalski vzorec -->
-            <p><strong>TO-DO</strong>: Na tem mestu morate navesti uporabljen master/detail načrtovalski vzorec in na kakšen način ga nameravate uporabiti.</p>
+            <p>
+              Master/detail vzorec je uporabljen za seznam vitalnih znakov.
+              Vsakemu od teh pripada tabela vrednosti, graf vrednosti in dodatne informacije o tem vitalnem znaku.
+              Če bi bilo to prikazano za vsak vitalni znak, bi bila stran vertikalno precej velika,
+              zato tu uporabimo master/detail vzorec.
+            </p>
             <!-- KONEC: Master/detail načrtovalski vzorec -->
           </div>
         </div>
@@ -88,7 +93,11 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
-            <p><strong>TO-DO</strong>: Na tem mestu je potrebno navesti uporabljeno tehniko vizualizacije podatkov (za pomoč lahko uporabite primer iz <a href="https://github.com/mbostock/d3/wiki/Gallery" target="_blank">D3.js galerije</a>) in zakaj je bila ta tehnika izbrana.</p>
+            <p>
+              Aplikacija za vizualizacijo uporablja enostavne črtne grafe.
+              Ti na enostaven in berljiv način prikazujejo spremembe vitalnih znakov skozi čas.
+              Za namen te aplikacije ni potrebe po kompleksnejših tehnikah, poleg tega pa so črtni grafi razumljivi vsem.
+            </p>
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>
