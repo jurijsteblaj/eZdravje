@@ -65,3 +65,12 @@ input[type="text"] {
 #systolic-input, #diastolic-input {
     width: 15%;
 }
+
+.master-detail-icon {
+    height: 20px;
+}
+
+.axis path {
+    stroke: #000;
+    fill: none;
+}

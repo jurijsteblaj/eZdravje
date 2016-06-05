@@ -238,7 +238,7 @@ function generateChart(div, ehrId, dataType) {
                     domain = [0, 300];
             }
             
-            var vis = d3.select("#" + svgId),
+            var chart = d3.select("#" + svgId),
                 WIDTH = $("#" + svgId).parent().width(),
                 HEIGHT = $("#" + svgId).parent().height(),
                 MARGINS = {
@@ -255,11 +255,13 @@ function generateChart(div, ehrId, dataType) {
                     .scale(yScale)
                     .orient("left");
             
-            vis.append("svg:g")
+            chart.append("svg:g")
+                .attr("class", "axis")
                 .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
                 .call(xAxis);
             
-            vis.append("svg:g")
+            chart.append("svg:g")
+                .attr("class", "axis")
                 .attr("transform", "translate(" + (MARGINS.left) + ",0)")
                 .call(yAxis);
             
@@ -286,7 +288,7 @@ function generateChart(div, ehrId, dataType) {
                 }
             }
             
-            vis.append('svg:path')
+            chart.append('svg:path')
                 .attr('d', lineGen(values))
                 .attr('stroke', 'blue')
                 .attr('stroke-width', 1)
@@ -297,7 +299,7 @@ function generateChart(div, ehrId, dataType) {
                     values[values.length - i - 1].val = data[i].diastolic;
                 }
                 
-                vis.append('svg:path')
+                chart.append('svg:path')
                     .attr('d', lineGen(values))
                     .attr('stroke', 'green')
                     .attr('stroke-width', 1)
@@ -415,19 +417,26 @@ $(document).ready(function() {
         
         var outputDiv = $(this).next();
         
-        var dataType = outputDiv.attr("id").split("-")[0];
-        if (ehrId == "") {
-            $("#ehr-id-input").css("background-color", "#ff7f7f");
-            outputDiv.children(".data").html("<div class='no-ehr-id'>Enter your EHR ID to see data</div>");
-            outputDiv.children(".chart").html("<div class='no-ehr-id'>Enter your EHR ID to see data</div>");
+        if (outputDiv.css("display") === "none") {
+            var dataType = outputDiv.attr("id").split("-")[0];
+            if (ehrId == "") {
+                $("#ehr-id-input").css("background-color", "#ff7f7f");
+                outputDiv.children(".data").html("<div class='no-ehr-id'>Enter your EHR ID to see data</div>");
+                outputDiv.children(".chart").html("<div class='no-ehr-id'>Enter your EHR ID to see data</div>");
+            }
+            else {
+                $("#ehr-id-input").css("background-color", "white");
+                generateTable(outputDiv.children(".data"), ehrId, dataType);
+                generateChart(outputDiv.children(".chart"), ehrId, dataType);
+            }
+            
+            generateAdditionalInfo(outputDiv.children(".about"), dataType);
+            
+            $(this).find(".master-detail-icon").attr("src", "img/down_arrow.png");
         }
         else {
-            $("#ehr-id-input").css("background-color", "white");
-            generateTable(outputDiv.children(".data"), ehrId, dataType);
-            generateChart(outputDiv.children(".chart"), ehrId, dataType);
+            $(this).find(".master-detail-icon").attr("src", "img/right_arrow.png");
         }
-        
-        generateAdditionalInfo(outputDiv.children(".about"), dataType);
         outputDiv.slideToggle();
     });
 })
