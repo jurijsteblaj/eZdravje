@@ -35,3 +35,32 @@ h3 {
     height: 250px;
 }
 
+.data {
+    width: 35%;
+}
+
+.data table {
+    width: 100%;
+}
+
+.chart {
+    width: 35%;
+}
+
+.about {
+    width: 25%;
+    overflow-x: auto;
+}
+
+.input-label {
+    float: left;
+    width: 15%;
+}
+
+input[type="text"] {
+    width: 30%;
+}
+
+#systolic-input, #diastolic-input {
+    width: 15%;
+}

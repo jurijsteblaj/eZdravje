@@ -169,7 +169,7 @@ function getData(ehrId, dataType, callback) {
 }
 
 function generateTable(div, ehrId, dataType) {
-	var result = "<table><tr><th>Date and time</th><th>";
+	var result = "<table><tr><th></th><th>Date and time</th><th>";
 	switch (dataType) {
 	    case "oxygen":
 	        result += "Oxygen level";
@@ -185,7 +185,10 @@ function generateTable(div, ehrId, dataType) {
 	getData(ehrId, dataType, function(error, data) {
 	    if (! error) {
 	        for (var i in data) {
-                result += "<tr><td>" + data[i].time + "</td><td>";
+	            result += "<tr><td>" + (data.length - i) + "</td>";
+	            //var splitTime = data[i].time.split(":");
+                //result += "<td>" + splitTime[0]+":"+splitTime[1] + "</td><td>";
+                result += "<td>" + data[i].time + "</td><td>";
                 switch (dataType) {
                     case "pressure":
                         result += data[i].systolic + data[i].unit +"</td><td>" +
@@ -212,7 +215,7 @@ function generateChart(div, ehrId, dataType) {
     getData(ehrId, dataType, function(error, data) {
         if (! error) {
             var svgId = dataType + "-d3";
-            div.html("<svg id='" + svgId + "' width='250' height='250'></svg>");
+            div.html("<svg id='" + svgId + "' width='100%' height='100%'></svg>");
             
             var domain;
             switch (dataType) {
@@ -236,8 +239,8 @@ function generateChart(div, ehrId, dataType) {
             }
             
             var vis = d3.select("#" + svgId),
-                WIDTH = 250,
-                HEIGHT = 250,
+                WIDTH = $("#" + svgId).parent().width(),
+                HEIGHT = $("#" + svgId).parent().height(),
                 MARGINS = {
                     top: 20,
                     right: 20,
