@@ -28,6 +28,7 @@ h3 {
 .detail {
     display: none;
     width: 90%;
+    height: 250px;
 }
 
 .detail div {

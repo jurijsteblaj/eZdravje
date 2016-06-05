@@ -418,6 +418,8 @@ $(document).ready(function() {
         var dataType = outputDiv.attr("id").split("-")[0];
         if (ehrId == "") {
             $("#ehr-id-input").css("background-color", "#ff7f7f");
+            outputDiv.children(".data").html("<div class='no-ehr-id'>Enter your EHR ID to see data</div>");
+            outputDiv.children(".chart").html("<div class='no-ehr-id'>Enter your EHR ID to see data</div>");
         }
         else {
             $("#ehr-id-input").css("background-color", "white");
